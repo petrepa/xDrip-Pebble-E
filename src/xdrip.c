@@ -2004,17 +2004,22 @@ void window_load_cgm(Window *window_cgm) {
 
     window_layer_cgm = window_get_root_layer(window_cgm);
 
-    //Paint the backgrounds for upper and lower halves of the watch face.
+    // BACKGROUND: Changed to all-white instead of white/black split
+    // Original design: white top (glucose), black/blue bottom (clock/date)
+    // New design: white everywhere for cleaner look
 #ifdef DEBUG_LEVEL
     APP_LOG(APP_LOG_LEVEL_INFO, "Creating Upper and Lower face panels");
 #endif
 #ifdef PBL_ROUND
+    // Round watch (Pebble Time Round): 180x180, use single layer for full screen
     upper_face_layer = bitmap_layer_create(GRect(0,0,180,180));
-    lower_face_layer = bitmap_layer_create(GRect(0,0,0,0));  // Not used, all white now
+    lower_face_layer = bitmap_layer_create(GRect(0,0,0,0));  // Unused, kept for compatibility
 #else
+    // Rectangular watch (Pebble 2): 144x168, use single layer for full screen
     upper_face_layer = bitmap_layer_create(GRect(0, 0, 144, 168));
-    lower_face_layer = bitmap_layer_create(GRect(0,0,0,0));  // Not used, all white now
+    lower_face_layer = bitmap_layer_create(GRect(0,0,0,0));  // Unused, kept for compatibility
 #endif
+    // Both layers white (lower_face_layer is 0x0 so effectively invisible)
     bitmap_layer_set_background_color(upper_face_layer, GColorWhite);
     bitmap_layer_set_background_color(lower_face_layer, GColorWhite);
     layer_add_child(window_layer_cgm, bitmap_layer_get_layer(upper_face_layer));
