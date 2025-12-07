@@ -6,8 +6,8 @@
 /* The line below will set the debug message level.
 Make sure you set this to 0 before building a release. */
 
-//#define DEBUG_LEVEL 1
-//#define TEST_MODE
+#define DEBUG_LEVEL 1
+// #define TEST_MODE
 // global window variables
 // ANYTHING THAT IS CALLED BY PEBBLE API HAS TO BE NOT STATIC
 
@@ -2009,18 +2009,14 @@ void window_load_cgm(Window *window_cgm) {
     APP_LOG(APP_LOG_LEVEL_INFO, "Creating Upper and Lower face panels");
 #endif
 #ifdef PBL_ROUND
-    upper_face_layer = bitmap_layer_create(GRect(0,0,180,83));
-    lower_face_layer = bitmap_layer_create(GRect(0,84,180,165));
+    upper_face_layer = bitmap_layer_create(GRect(0,0,180,180));
+    lower_face_layer = bitmap_layer_create(GRect(0,0,0,0));  // Not used, all white now
 #else
-    upper_face_layer = bitmap_layer_create(GRect(0, 0, 144, 83));
-    lower_face_layer = bitmap_layer_create(GRect(0, 84, 144, 165));
+    upper_face_layer = bitmap_layer_create(GRect(0, 0, 144, 168));
+    lower_face_layer = bitmap_layer_create(GRect(0,0,0,0));  // Not used, all white now
 #endif
     bitmap_layer_set_background_color(upper_face_layer, GColorWhite);
-#ifdef PBL_COLOR
-    bitmap_layer_set_background_color(lower_face_layer, GColorDukeBlue);
-#else
-    bitmap_layer_set_background_color(lower_face_layer, GColorBlack);
-#endif
+    bitmap_layer_set_background_color(lower_face_layer, GColorWhite);
     layer_add_child(window_layer_cgm, bitmap_layer_get_layer(upper_face_layer));
     layer_add_child(window_layer_cgm, bitmap_layer_get_layer(lower_face_layer));
 
@@ -2050,9 +2046,13 @@ void window_load_cgm(Window *window_cgm) {
     bitmap_layer_set_compositing_mode(bg_trend_layer, GCompOpSet);
     layer_add_child(window_layer_cgm, bitmap_layer_get_layer(bg_trend_layer));
 #endif
-// APLITE and DIORITE
+// APLITE and DIORITE (Pebble 2 and other BW watches)
 #ifdef PBL_BW
-    bg_trend_layer = bitmap_layer_create(GRect(0,24,144,64));
+    // Increased graph size from 144x64 to 144x100 to match xDrip image size
+    // Position: x=0, y=24 (24px from top for BG value/icons)
+    // Size: 144px wide (full screen) × 100px tall (was 64px)
+    // Receives 144x100px 2-color PNG from xDrip and displays it here
+    bg_trend_layer = bitmap_layer_create(GRect(0,24,144,100));
     layer_set_update_proc(bitmap_layer_get_layer(bg_trend_layer),bitmapLayerUpdate);
 #endif
 
@@ -2157,6 +2157,7 @@ void window_load_cgm(Window *window_cgm) {
 #endif
 
     // CURRENT ACTUAL TIME FROM WATCH
+    // Created but not displayed - will be re-added later
 #ifdef DEBUG_LEVEL
     APP_LOG(APP_LOG_LEVEL_INFO, "Creating Watch Time Text layer");
 #endif
@@ -2175,9 +2176,10 @@ void window_load_cgm(Window *window_cgm) {
 #endif
     text_layer_set_font(time_watch_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
     text_layer_set_text_alignment(time_watch_layer, GTextAlignmentCenter);
-    layer_add_child(window_layer_cgm, text_layer_get_layer(time_watch_layer));
+    // HIDDEN: layer_add_child(window_layer_cgm, text_layer_get_layer(time_watch_layer));
 
     // CURRENT ACTUAL DATE FROM APP
+    // Created but not displayed - will be re-added later
 #ifdef DEBUG_LEVEL
     APP_LOG(APP_LOG_LEVEL_INFO, "Creating Watch Date Text layer");
 #endif
@@ -2197,9 +2199,10 @@ void window_load_cgm(Window *window_cgm) {
     text_layer_set_font(date_app_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
     text_layer_set_text_alignment(date_app_layer, GTextAlignmentCenter);
     draw_date_from_app();
-    layer_add_child(window_layer_cgm, text_layer_get_layer(date_app_layer));
+    // HIDDEN: layer_add_child(window_layer_cgm, text_layer_get_layer(date_app_layer));
 
     // PHONE BATTERY LEVEL
+    // Created but not displayed - will be re-added later
 #ifdef DEBUG_LEVEL
     APP_LOG(APP_LOG_LEVEL_INFO, "Creating Phone Battery Text layer");
 #endif
@@ -2218,7 +2221,7 @@ void window_load_cgm(Window *window_cgm) {
 #endif
     text_layer_set_font(battlevel_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
     text_layer_set_text_alignment(battlevel_layer, GTextAlignmentLeft);
-    layer_add_child(window_layer_cgm, text_layer_get_layer(battlevel_layer));
+    // HIDDEN: layer_add_child(window_layer_cgm, text_layer_get_layer(battlevel_layer));
 #ifdef DEBUG_LEVEL
     APP_LOG(APP_LOG_LEVEL_INFO, "battlevel_layer; %s", text_layer_get_text(battlevel_layer));
 #endif
@@ -2266,7 +2269,7 @@ void window_load_cgm(Window *window_cgm) {
         text_layer_set_background_color(watch_battlevel_layer, GColorWhite);
     }
 #endif
-    layer_add_child(window_layer_cgm, text_layer_get_layer(watch_battlevel_layer));
+    // HIDDEN: layer_add_child(window_layer_cgm, text_layer_get_layer(watch_battlevel_layer));
     battery_handler(charge_state);
 #ifdef DEBUG_LEVEL
     APP_LOG(APP_LOG_LEVEL_INFO, "watch_battlevel_layer; %s", text_layer_get_text(watch_battlevel_layer));
