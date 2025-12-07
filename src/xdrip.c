@@ -2162,7 +2162,11 @@ void window_load_cgm(Window *window_cgm) {
 #endif
 
     // CURRENT ACTUAL TIME FROM WATCH
-    // Created but not displayed - will be re-added later
+    // HIDDEN: Layers created but not added to window (layer_add_child commented out)
+    // Layers must still be created because:
+    // 1. Update functions (handle_second_tick_cgm) write to these layers
+    // 2. Cleanup code (window_unload_cgm) destroys these layers
+    // Without creation, app would crash on NULL pointer access
 #ifdef DEBUG_LEVEL
     APP_LOG(APP_LOG_LEVEL_INFO, "Creating Watch Time Text layer");
 #endif
@@ -2184,7 +2188,7 @@ void window_load_cgm(Window *window_cgm) {
     // HIDDEN: layer_add_child(window_layer_cgm, text_layer_get_layer(time_watch_layer));
 
     // CURRENT ACTUAL DATE FROM APP
-    // Created but not displayed - will be re-added later
+    // HIDDEN: Same pattern as time_watch_layer (see comments above)
 #ifdef DEBUG_LEVEL
     APP_LOG(APP_LOG_LEVEL_INFO, "Creating Watch Date Text layer");
 #endif
@@ -2207,7 +2211,7 @@ void window_load_cgm(Window *window_cgm) {
     // HIDDEN: layer_add_child(window_layer_cgm, text_layer_get_layer(date_app_layer));
 
     // PHONE BATTERY LEVEL
-    // Created but not displayed - will be re-added later
+    // HIDDEN: Same pattern as time_watch_layer (see comments above)
 #ifdef DEBUG_LEVEL
     APP_LOG(APP_LOG_LEVEL_INFO, "Creating Phone Battery Text layer");
 #endif
