@@ -139,23 +139,6 @@ Data loading functions called from message handler:
 - `load_bg_delta()` - Update delta value (src/xdrip.c:1326)
 - `load_battlevel()` - Update battery levels (src/xdrip.c:1420)
 
-## Common Tasks
-
-Building for specific platform:
-```bash
-pebble build --platform basalt
-```
-
-Analyzing binary size:
-```bash
-pebble analyze-size
-```
-
-Installing and viewing logs:
-```bash
-pebble install --logs
-```
-
 ## Customization Guide
 
 The user is customizing this watchface for personal use with the following goals:
