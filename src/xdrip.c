@@ -2179,8 +2179,8 @@ void window_load_cgm(Window *window_cgm) {
     text_layer_set_text_color(time_watch_layer, GColorWhite);
     text_layer_set_background_color(time_watch_layer, GColorClear);
 #else
-    // Screen height - text size - margin
-    time_watch_layer = text_layer_create(GRect(0, 168 - 44 - 4, 143, 44));
+    const int time_layer_ypos = PBL_DISPLAY_HEIGHT - 44 - 4; // Screen height - text size - margin
+    time_watch_layer = text_layer_create(GRect(0, time_layer_ypos, 143, 44));
     text_layer_set_text_color(time_watch_layer, GColorBlack);
     text_layer_set_background_color(time_watch_layer, GColorClear);
 #endif
