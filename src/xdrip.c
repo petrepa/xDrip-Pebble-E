@@ -2179,13 +2179,14 @@ void window_load_cgm(Window *window_cgm) {
     text_layer_set_text_color(time_watch_layer, GColorWhite);
     text_layer_set_background_color(time_watch_layer, GColorClear);
 #else
-    time_watch_layer = text_layer_create(GRect(0, 82, 143, 44));
-    text_layer_set_text_color(time_watch_layer, GColorWhite);
+    // Screen height - text size - margin
+    time_watch_layer = text_layer_create(GRect(0, 168 - 44 - 4, 143, 44));
+    text_layer_set_text_color(time_watch_layer, GColorBlack);
     text_layer_set_background_color(time_watch_layer, GColorClear);
 #endif
     text_layer_set_font(time_watch_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
     text_layer_set_text_alignment(time_watch_layer, GTextAlignmentCenter);
-    // HIDDEN: layer_add_child(window_layer_cgm, text_layer_get_layer(time_watch_layer));
+    layer_add_child(window_layer_cgm, text_layer_get_layer(time_watch_layer));
 
     // CURRENT ACTUAL DATE FROM APP
     // HIDDEN: Same pattern as time_watch_layer (see comments above)
