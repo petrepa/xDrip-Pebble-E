@@ -2137,7 +2137,8 @@ void window_load_cgm(Window *window_cgm) {
 #endif
     //cgmtime_layer = text_layer_create(GRect(5, 58, 40, 24));
 #ifdef PBL_BW
-    cgmtime_layer = text_layer_create(GRect(104, 58, 40, 24));
+    //
+    cgmtime_layer = text_layer_create(GRect(104, 40, 40, 24));
 #elif PBL_ROUND
     cgmtime_layer = text_layer_create(GRect(5, 58, 40, 24));
 #else
