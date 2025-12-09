@@ -14,7 +14,8 @@
       "basalt",
       "chalk",
       "diorite",
-      "flint"
+      "flint",
+      "emery"
     ],
     "enableMultiJS": false,
     "capabilities": [
@@ -119,6 +120,11 @@
         {
           "file": "images/err.png",
           "name": "IMAGE_ERR",
+          "type": "bitmap"
+        },
+        {
+          "file": "images/test-graph.png",
+          "name": "IMAGE_TEST_GRAPH",
           "type": "bitmap"
         }
       ]
