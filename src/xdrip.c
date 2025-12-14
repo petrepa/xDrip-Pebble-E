@@ -2132,7 +2132,7 @@ void window_load_cgm(Window *window_cgm) {
     text_layer_set_text_color(bg_layer, GColorDukeBlue);
     text_layer_set_background_color(bg_layer, GColorClear);
 #else
-    bg_layer = text_layer_create(GRect(0, -5, 95, 47));
+    bg_layer = text_layer_create(GRect(0, -7, 95, 42));
     text_layer_set_text_color(bg_layer, GColorBlack);
     text_layer_set_background_color(bg_layer, GColorClear);
 #endif
