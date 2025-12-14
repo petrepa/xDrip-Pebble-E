@@ -713,7 +713,8 @@ static void draw_date_from_app() {
         }
     }
 
-    draw_return = strftime(date_app_text, DATE_TEXTBUFF_SIZE, "%a %d %b", current_d_app);
+    // Try to make date return only the day number
+    draw_return = strftime(date_app_text, DATE_TEXTBUFF_SIZE, "%d", current_d_app);
     if (draw_return != 0) {
         text_layer_set_text(date_app_layer, date_app_text);
     }
@@ -2212,14 +2213,14 @@ void window_load_cgm(Window *window_cgm) {
     text_layer_set_text_color(date_app_layer, GColorWhite);
     text_layer_set_background_color(date_app_layer, GColorClear);
 #else
-    date_app_layer = text_layer_create(GRect(0, 120, 143, 29));
-    text_layer_set_text_color(date_app_layer, GColorWhite);
+    date_app_layer = text_layer_create(GRect(144-24, 132, 24, 24));
+    text_layer_set_text_color(date_app_layer, GColorBlack);
     text_layer_set_background_color(date_app_layer, GColorClear);
 #endif
     text_layer_set_font(date_app_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
     text_layer_set_text_alignment(date_app_layer, GTextAlignmentCenter);
     draw_date_from_app();
-    // HIDDEN: layer_add_child(window_layer_cgm, text_layer_get_layer(date_app_layer));
+    layer_add_child(window_layer_cgm, text_layer_get_layer(date_app_layer));
 
     // PHONE BATTERY LEVEL
     // HIDDEN: Same pattern as time_watch_layer (see comments above)
