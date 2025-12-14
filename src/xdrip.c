@@ -2051,7 +2051,6 @@ void window_load_cgm(Window *window_cgm) {
     bitmap_layer_set_compositing_mode(bg_trend_layer, GCompOpSet);
     layer_add_child(window_layer_cgm, bitmap_layer_get_layer(bg_trend_layer));
 #endif
-// APLITE and DIORITE (Pebble 2 and other BW watches)
 #ifdef PBL_BW
     // Increased graph size from 144x64 to 144x100 to match xDrip image size
     // Position: x=0, y=24 (24px from top for BG value/icons)
