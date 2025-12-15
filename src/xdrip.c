@@ -2213,7 +2213,7 @@ void window_load_cgm(Window *window_cgm) {
     text_layer_set_text_color(date_app_layer, GColorWhite);
     text_layer_set_background_color(date_app_layer, GColorClear);
 #else
-    date_app_layer = text_layer_create(GRect(144-24, 132, 24, 24));
+    date_app_layer = text_layer_create(GRect(120, 132, 24, 24));
     text_layer_set_text_color(date_app_layer, GColorBlack);
     text_layer_set_background_color(date_app_layer, GColorClear);
 #endif
