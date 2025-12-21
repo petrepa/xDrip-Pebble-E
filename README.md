@@ -11,7 +11,9 @@ My Pebble xDrip watchface:
 
 ## Installation
 
-* Use [my xDrip fork](https://github.com/mortenfyhn/xDrip) (xDrip sends the graph as a PNG to the watch, so big graph needs patched xDrip, I hope to merge support upstream later)
+* Install xDrip
+    * At least [2025.12.07](https://github.com/NightscoutFoundation/xDrip/releases/tag/2025.12.07) to make it run
+    * Or [my fork](https://github.com/mortenfyhn/xDrip) for full compatibility (big graph, and graph tweaks)
 * Enable Pebble integration in xDrip
 * Select "Pebble Classic Trend Watchface", say no to the install prompt
 * Enable:
@@ -20,6 +22,10 @@ My Pebble xDrip watchface:
     * Display High Line
     * Display Slope Arrows
 * [Build and install the watchface](https://developer.rebble.io/sdk/)
+    * Turn on "Use LAN developer connection" in Pebble app settings
+    * Turn on "Dev Connection" in the Pebble app settings for your watch
+    * `pebble build`
+    * `pebble install --phone IP`
 
 ## Repo landscape
 
