@@ -11,7 +11,7 @@ My Pebble xDrip watchface:
 
 ## Installation
 
-* Use xDrip [2025.12.07](https://github.com/NightscoutFoundation/xDrip/releases/tag/2025.12.07) or newer (or [my xDrip fork](https://github.com/mortenfyhn/xDrip), I don't remember if it's strictly needed)
+* Use [my xDrip fork](https://github.com/mortenfyhn/xDrip) (xDrip sends the graph as a PNG to the watch, so big graph needs patched xDrip, I hope to merge support upstream later)
 * Enable Pebble integration in xDrip
 * Select "Pebble Classic Trend Watchface", say no to the install prompt
 * Enable:
