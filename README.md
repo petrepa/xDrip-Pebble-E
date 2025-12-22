@@ -27,6 +27,17 @@ My Pebble xDrip watchface:
     * `pebble build`
     * `pebble install --phone IP`
 
+## Emulator
+
+Testing layout changes is much faster with the emulator:
+
+```sh
+pebble build
+pebble install --emulator diorite
+```
+
+Seems platform `flint` (new Pebble 2 Duo) isn't supported by the emulator yet but `diorite` (older Pebble 2) is pretty much the same.
+
 ## Repo landscape
 
 There are several xDrip Pebble watchface repos that build on each other:
