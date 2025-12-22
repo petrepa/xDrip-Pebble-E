@@ -10,7 +10,12 @@
   "pebble": {
     "sdkVersion": "3",
     "targetPlatforms": [
-      "flint"
+      "aplite",
+      "basalt",
+      "chalk",
+      "diorite",
+      "flint",
+      "emery"
     ],
     "enableMultiJS": false,
     "capabilities": [
