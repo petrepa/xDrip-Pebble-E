@@ -488,8 +488,8 @@ static void battery_handler(BatteryChargeState charge_state) {
         text_layer_set_background_color(watch_battlevel_layer, GColorGreen);
 #else
         //APP_LOG(APP_LOG_LEVEL_INFO, "BW DETECTED");
-        text_layer_set_text_color(watch_battlevel_layer, GColorBlack);
-        text_layer_set_background_color(watch_battlevel_layer, GColorWhite);
+        text_layer_set_text_color(watch_battlevel_layer, GColorWhite);
+        text_layer_set_background_color(watch_battlevel_layer, GColorBlack);
 #endif
     } else {
 #ifdef PBL_COLOR
@@ -512,8 +512,8 @@ static void battery_handler(BatteryChargeState charge_state) {
         text_layer_set_background_color(watch_battlevel_layer, GColorDukeBlue);
 #else
         //APP_LOG(APP_LOG_LEVEL_INFO, "BW DETECTED");
-        text_layer_set_text_color(watch_battlevel_layer, GColorWhite);
-        text_layer_set_background_color(watch_battlevel_layer, GColorBlack);
+        text_layer_set_text_color(watch_battlevel_layer, GColorBlack);
+        text_layer_set_background_color(watch_battlevel_layer, GColorWhite);
 #endif
     }
     text_layer_set_text(watch_battlevel_layer, watch_battlevel_percent);
@@ -672,7 +672,7 @@ void handle_bluetooth_cgm(bool bt_connected) {
             BT_timer_pop = false;
         }
 #ifdef PBL_COLOR
-        text_layer_set_text_color(delta_layer, GColorBlack);
+        text_layer_set_text_color(delta_layer, GColorWhite);
 #endif
 
     }
@@ -1413,7 +1413,7 @@ static void load_bg_delta() {
 
     text_layer_set_text(delta_layer, formatted_bg_delta);
 #ifdef PBL_COLOR
-    text_layer_set_text_color(delta_layer,GColorBlack);
+    text_layer_set_text_color(delta_layer,GColorWhite);
 #endif
 #ifdef DEBUG_LEVEL
     APP_LOG(APP_LOG_LEVEL_INFO, "LOAD_BG_DELTA: delta_layer is \"%s\"", text_layer_get_text(delta_layer));
@@ -2061,8 +2061,8 @@ void window_load_cgm(Window *window_cgm) {
     lower_face_layer = bitmap_layer_create(GRect(0,0,0,0));  // Unused, kept for compatibility
 #endif
     // Both layers white (lower_face_layer is 0x0 so effectively invisible)
-    bitmap_layer_set_background_color(upper_face_layer, GColorWhite);
-    bitmap_layer_set_background_color(lower_face_layer, GColorWhite);
+    bitmap_layer_set_background_color(upper_face_layer, GColorBlack);
+    bitmap_layer_set_background_color(lower_face_layer, GColorBlack);
     layer_add_child(window_layer_cgm, bitmap_layer_get_layer(upper_face_layer));
     layer_add_child(window_layer_cgm, bitmap_layer_get_layer(lower_face_layer));
 
@@ -2123,7 +2123,7 @@ void window_load_cgm(Window *window_cgm) {
 #ifdef PBL_COLOR
     text_layer_set_text_color(delta_layer, GColorDukeBlue);
 #else
-    text_layer_set_text_color(delta_layer, GColorBlack);
+    text_layer_set_text_color(delta_layer, GColorWhite);
 #endif
     text_layer_set_background_color(delta_layer, GColorClear);
     text_layer_set_font(delta_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28));
@@ -2151,9 +2151,9 @@ void window_load_cgm(Window *window_cgm) {
     iob_layer = text_layer_create(GRect(0, 126, 143, 20));
 #endif
 #ifdef PBL_COLOR
-    text_layer_set_text_color(iob_layer, GColorBlack);
+    text_layer_set_text_color(iob_layer, GColorWhite);
 #else
-    text_layer_set_text_color(iob_layer, GColorBlack);
+    text_layer_set_text_color(iob_layer, GColorWhite);
 #endif
     text_layer_set_background_color(iob_layer, GColorClear);
     text_layer_set_font(iob_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14));
@@ -2170,7 +2170,7 @@ void window_load_cgm(Window *window_cgm) {
     text_layer_set_text_color(message_layer, GColorDukeBlue);
 #else
     //message_layer = text_layer_create(GRect(0, 33, 143, 55));
-    text_layer_set_text_color(message_layer, GColorBlack);
+    text_layer_set_text_color(message_layer, GColorWhite);
 #endif
     text_layer_set_background_color(message_layer, GColorClear);
     text_layer_set_font(message_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28));
@@ -2193,7 +2193,7 @@ void window_load_cgm(Window *window_cgm) {
     text_layer_set_background_color(bg_layer, GColorClear);
 #else
     bg_layer = text_layer_create(GRect(0, -7, 95, 42));
-    text_layer_set_text_color(bg_layer, GColorBlack);
+    text_layer_set_text_color(bg_layer, GColorWhite);
     text_layer_set_background_color(bg_layer, GColorClear);
 #endif
     text_layer_set_font(bg_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
@@ -2219,7 +2219,7 @@ void window_load_cgm(Window *window_cgm) {
     text_layer_set_text_color(cgmtime_layer, GColorDukeBlue);
     text_layer_set_background_color(cgmtime_layer, GColorClear);
 #else
-    text_layer_set_text_color(cgmtime_layer, GColorBlack);
+    text_layer_set_text_color(cgmtime_layer, GColorWhite);
     text_layer_set_background_color(cgmtime_layer, GColorClear);
 #endif
     text_layer_set_font(cgmtime_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
@@ -2247,12 +2247,12 @@ void window_load_cgm(Window *window_cgm) {
     text_layer_set_background_color(time_watch_layer, GColorClear);
 #elif PBL_COLOR
     time_watch_layer = text_layer_create(GRect(0, 82, 143, 44));
-    text_layer_set_text_color(time_watch_layer, GColorWhite);
+    text_layer_set_text_color(time_watch_layer, GColorBlack);
     text_layer_set_background_color(time_watch_layer, GColorClear);
 #else
     const int time_layer_ypos = PBL_DISPLAY_HEIGHT - 42 - 4; // Screen height - text size - margin
     time_watch_layer = text_layer_create(GRect(0, time_layer_ypos, 125, 42));
-    text_layer_set_text_color(time_watch_layer, GColorBlack);
+    text_layer_set_text_color(time_watch_layer, GColorWhite);
     text_layer_set_background_color(time_watch_layer, GColorClear);
 #endif
     text_layer_set_font(time_watch_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
@@ -2266,15 +2266,15 @@ void window_load_cgm(Window *window_cgm) {
 #endif
 #ifdef PBL_ROUND
     date_app_layer = text_layer_create(GRect(18, 124, 143, 26));
-    text_layer_set_text_color(date_app_layer, GColorWhite);
+    text_layer_set_text_color(date_app_layer, GColorBlack);
     text_layer_set_background_color(date_app_layer, GColorClear);
 #elif PBL_COLOR
     date_app_layer = text_layer_create(GRect(0, 124, 143, 26));
-    text_layer_set_text_color(date_app_layer, GColorWhite);
+    text_layer_set_text_color(date_app_layer, GColorBlack);
     text_layer_set_background_color(date_app_layer, GColorClear);
 #else  // PBL_BW
     date_app_layer = text_layer_create(GRect(119, 132, 24, 24));
-    text_layer_set_text_color(date_app_layer, GColorBlack);
+    text_layer_set_text_color(date_app_layer, GColorWhite);
     text_layer_set_background_color(date_app_layer, GColorClear);
 #endif
     text_layer_set_font(date_app_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
@@ -2297,7 +2297,7 @@ void window_load_cgm(Window *window_cgm) {
     text_layer_set_background_color(battlevel_layer, GColorClear);
 #else
     battlevel_layer = text_layer_create(GRect(0, 148, 59, 18));
-    text_layer_set_text_color(battlevel_layer, GColorWhite);
+    text_layer_set_text_color(battlevel_layer, GColorBlack);
     text_layer_set_background_color(battlevel_layer, GColorClear);
 #endif
     text_layer_set_font(battlevel_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
@@ -2343,11 +2343,11 @@ void window_load_cgm(Window *window_cgm) {
         }
 #else
     if (charge_state.is_charging) {
-        text_layer_set_text_color(watch_battlevel_layer, GColorBlack);
-        text_layer_set_background_color(watch_battlevel_layer, GColorWhite);
+        text_layer_set_text_color(watch_battlevel_layer, GColorWhite);
+        text_layer_set_background_color(watch_battlevel_layer, GColorBlack);
     } else {
-        text_layer_set_text_color(watch_battlevel_layer, GColorBlack);
-        text_layer_set_background_color(watch_battlevel_layer, GColorWhite);
+        text_layer_set_text_color(watch_battlevel_layer, GColorWhite);
+        text_layer_set_background_color(watch_battlevel_layer, GColorBlack);
     }
 #endif
     // HIDDEN: layer_add_child(window_layer_cgm, text_layer_get_layer(watch_battlevel_layer));
@@ -2449,7 +2449,7 @@ static void init_cgm(void) {
 
     // create the windows
     window_cgm = window_create();
-    window_set_background_color(window_cgm, GColorBlack);
+    window_set_background_color(window_cgm, GColorWhite);
     window_set_window_handlers(window_cgm, (WindowHandlers)
             {
                     .load = window_load_cgm,
