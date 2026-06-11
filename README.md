@@ -8,9 +8,9 @@ A CGM watchface for xDrip+ on the **Pebble Time 2 (Emery, 200×228)**, redesigne
 
 ## Screenshot
 
-![Watchface screenshot](screenshot.png)
+<img width="200" height="228" alt="pebble_screenshot" src="https://github.com/user-attachments/assets/95401ed5-f179-4bec-be73-6792f783bf11" />
+<img width="1555" height="1525" alt="image" src="https://github.com/user-attachments/assets/4556a5a3-8cd4-4a8f-b748-525a7dd6ef5f" />
 
-*(Replace with a real screenshot from your watch)*
 
 ---
 
