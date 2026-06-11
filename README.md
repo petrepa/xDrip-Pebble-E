@@ -1,6 +1,6 @@
-# xDrip Casio — Pebble Time 2 Watchface
+# xDrip — Pebble Time 2 Watchface
 
-A CGM watchface for xDrip+ on the **Pebble Time 2 (Emery, 200×228)**, redesigned with a clean Casio-inspired aesthetic.
+A CGM watchface for xDrip+ on the **Pebble Time 2 (Emery, 200×228)**, redesigned with a clean minimal aesthetic.
 
 > **Based on** [consp/xDrip-Pebble-E](https://github.com/consp/xDrip-Pebble-E), which is itself based on the Nightscout community version.
 
@@ -91,7 +91,7 @@ Settings are stored on the watch and persist across watchface transitions.
 
 ## Change Log
 
-**pt2 branch — Casio redesign (2026-06-11)**
+**pt2 branch — Visual redesign (2026-06-11)**
 - Complete visual rewrite targeting Pebble Time 2 (Emery)
 - Clean black background, single-color design
 - Large Gotham Bold 60pt time display
