@@ -32,6 +32,10 @@ const char FACE_VERSION[] = "xDrip-Casio-PT2";
 #define SET_NO_VIBE         104
 #define SET_LIGHT_ON_CHG    105
 #define SET_MESSAGE_TIMEOUT 113
+#define SET_COLOR_LOW       120
+#define SET_COLOR_OK        121
+#define SET_COLOR_HIGH      122
+#define SET_LANGUAGE        123
 
 // -- Casio layout (Emery 200x228) --------------------------------------------
 // Section divider Y positions
@@ -55,9 +59,10 @@ static TextLayer   *s_cgmtime_layer;
 static TextLayer   *s_msg_layer;
 
 // Time / Date
-static TextLayer *s_time_layer;
+static Layer     *s_time_layer;
 static TextLayer *s_date_layer;
 static GFont      s_time_font = NULL;
+static char       s_time_str[10] = "00:00";
 
 // Weather / HR
 static Layer     *s_therm_icon;
@@ -117,6 +122,9 @@ static char     s_phone_bat_str[6]= " ";
 static char     s_temp_str[10]    = "--";
 static bool     s_specvalue        = false;
 static int      s_arrow_idx        = 0;
+static GColor   s_color_low;   // glucose below range
+static GColor   s_color_ok;    // glucose in range
+static GColor   s_color_high;  // glucose above range
 static bool     s_show_msg         = false;
 static char     s_msg_text[13]    = "";
 static int      s_hr_bpm           = 0;
@@ -365,9 +373,9 @@ static void update_icon(void) {
 
 // Returns color for BG value: red=low, green=normal, blue=high
 static GColor get_bg_color(void) {
-    if (s_bg_str[0] == '-') return GColorGreen;   // "---" no data yet
-    if (strcmp(s_bg_str, "LOW") == 0) return GColorRed;
-    if (strcmp(s_bg_str, "HIGH") == 0) return GColorVividCerulean;
+    if (s_bg_str[0] == '-') return s_color_ok;   // "---" no data — use in-range color
+    if (strcmp(s_bg_str, "LOW") == 0)  return s_color_low;
+    if (strcmp(s_bg_str, "HIGH") == 0) return s_color_high;
     if (s_specvalue) return GColorGreen;
 
     bool is_mmol = false;
@@ -380,13 +388,13 @@ static GColor get_bg_color(void) {
     // mmol stored as int*10 (e.g. "7.5" → v=75)
     // Low: <4.0 mmol / <70 mg/dL  |  High: >=10.0 mmol / >=180 mg/dL
     if (is_mmol) {
-        if (v < 40) return GColorRed;
-        if (v >= 100) return GColorVividCerulean;
+        if (v < 40)  return s_color_low;
+        if (v >= 100) return s_color_high;
     } else {
-        if (v < 70) return GColorRed;
-        if (v >= 180) return GColorVividCerulean;
+        if (v < 70)  return s_color_low;
+        if (v >= 180) return s_color_high;
     }
-    return GColorGreen;
+    return s_color_ok;
 }
 
 static void update_bg(void) {
@@ -461,10 +469,54 @@ static void update_phone_bat(void) {
     text_layer_set_text_color(s_phone_bat, GColorWhite);
 }
 
+// Each segment of HH:MM:SS drawn at fixed pixel positions to prevent
+// horizontal drift when digit widths vary. Cell widths are empirical for
+// LECO_42_NUMBERS; adjust DW/CW if segments look uneven on the real device.
+static void time_layer_proc(Layer *layer, GContext *ctx) {
+    GRect b = layer_get_bounds(layer);
+    graphics_context_set_text_color(ctx, GColorWhite);
+
+    if (!s_show_secs) {
+        // Normal mode — large Gotham font centered (updates only per-minute)
+        graphics_draw_text(ctx, s_time_str, s_time_font, b,
+            GTextOverflowModeWordWrap, GTextAlignmentCenter, NULL);
+        return;
+    }
+
+    // Seconds mode — fixed-cell drawing so nothing ever drifts
+    GFont f = fonts_get_system_font(FONT_KEY_LECO_42_NUMBERS);
+    const int DW = 52;  // cell width for a 2-digit group
+    const int CW = 14;  // cell width for a colon
+    // total = 3*DW + 2*CW; centre in layer
+    int x = (b.size.w - 3*DW - 2*CW) / 2;
+
+    char seg[3] = {0};
+    // HH
+    seg[0] = s_time_str[0]; seg[1] = s_time_str[1];
+    graphics_draw_text(ctx, seg, f, GRect(x, 0, DW, b.size.h),
+        GTextOverflowModeWordWrap, GTextAlignmentCenter, NULL);
+    x += DW;
+    graphics_draw_text(ctx, ":", f, GRect(x, 0, CW, b.size.h),
+        GTextOverflowModeWordWrap, GTextAlignmentCenter, NULL);
+    x += CW;
+    // MM
+    seg[0] = s_time_str[3]; seg[1] = s_time_str[4];
+    graphics_draw_text(ctx, seg, f, GRect(x, 0, DW, b.size.h),
+        GTextOverflowModeWordWrap, GTextAlignmentCenter, NULL);
+    x += DW;
+    graphics_draw_text(ctx, ":", f, GRect(x, 0, CW, b.size.h),
+        GTextOverflowModeWordWrap, GTextAlignmentCenter, NULL);
+    x += CW;
+    // SS
+    seg[0] = s_time_str[6]; seg[1] = s_time_str[7];
+    graphics_draw_text(ctx, seg, f, GRect(x, 0, DW, b.size.h),
+        GTextOverflowModeWordWrap, GTextAlignmentCenter, NULL);
+}
+
 static void update_time_date(struct tm *t) {
-    static char tbuf[10], dbuf[13];
-    strftime(tbuf, sizeof(tbuf), s_timefmt, t);
-    text_layer_set_text(s_time_layer, tbuf);
+    static char dbuf[13];
+    strftime(s_time_str, sizeof(s_time_str), s_timefmt, t);
+    layer_mark_dirty(s_time_layer);
     strftime(dbuf, sizeof(dbuf), "%a %d %b", t);
     text_layer_set_text(s_date_layer, dbuf);
 }
@@ -646,12 +698,13 @@ static void inbox_received(DictionaryIterator *iter, void *ctx) {
             if (s_show_secs) {
                 tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
                 snprintf(s_timefmt, sizeof(s_timefmt), "%s",
-                    clock_is_24h_style() ? "%H:%M:%S" : "%l:%M:%S");
+                    clock_is_24h_style() ? "%H:%M:%S" : "%H:%M:%S");
             } else {
                 tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
                 snprintf(s_timefmt, sizeof(s_timefmt), "%s",
                     clock_is_24h_style() ? "%H:%M" : "%l:%M");
             }
+            { time_t n = time(NULL); update_time_date(localtime(&n)); }
             break;
 
         case SET_NO_VIBE:
@@ -674,6 +727,24 @@ static void inbox_received(DictionaryIterator *iter, void *ctx) {
             persist_write_int(SET_MESSAGE_TIMEOUT, (int32_t)s_msg_tmout);
             if (!app_timer_reschedule(s_msg_timer, s_msg_tmout))
                 s_msg_timer = app_timer_register(s_msg_tmout, msg_timer_cb, NULL);
+            break;
+
+        case SET_COLOR_LOW:
+            s_color_low = GColorFromHEX(t->value->uint32);
+            persist_write_int(SET_COLOR_LOW, (int32_t)t->value->uint32);
+            if (s_bg_layer) text_layer_set_text_color(s_bg_layer, get_bg_color());
+            break;
+
+        case SET_COLOR_OK:
+            s_color_ok = GColorFromHEX(t->value->uint32);
+            persist_write_int(SET_COLOR_OK, (int32_t)t->value->uint32);
+            if (s_bg_layer) text_layer_set_text_color(s_bg_layer, get_bg_color());
+            break;
+
+        case SET_COLOR_HIGH:
+            s_color_high = GColorFromHEX(t->value->uint32);
+            persist_write_int(SET_COLOR_HIGH, (int32_t)t->value->uint32);
+            if (s_bg_layer) text_layer_set_text_color(s_bg_layer, get_bg_color());
             break;
 
         default: break;
@@ -742,12 +813,9 @@ static void window_load(Window *window) {
 
     // ── Time section (y=68..126) — LECO LCD digits, vertically centred ────────
     s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_GOTHAM_BOLD_60));
-    s_time_layer = text_layer_create(GRect(4, 66, 192, 61));
-    text_layer_set_background_color(s_time_layer, GColorClear);
-    text_layer_set_text_color(s_time_layer, GColorWhite);
-    text_layer_set_font(s_time_layer, s_time_font);
-    text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
-    layer_add_child(root, text_layer_get_layer(s_time_layer));
+    s_time_layer = layer_create(GRect(4, 66, 192, 61));
+    layer_set_update_proc(s_time_layer, time_layer_proc);
+    layer_add_child(root, s_time_layer);
 
     // ── Date section (y=128..151) ────────────────────────────────────────────
     s_date_layer = text_layer_create(GRect(4, 129, 192, 22));
@@ -830,7 +898,7 @@ static void window_unload(Window *window) {
     text_layer_destroy(s_delta_layer);
     text_layer_destroy(s_cgmtime_layer);
     text_layer_destroy(s_msg_layer);
-    text_layer_destroy(s_time_layer);
+    layer_destroy(s_time_layer);
     if (s_time_font) { fonts_unload_custom_font(s_time_font); s_time_font = NULL; }
     text_layer_destroy(s_date_layer);
     layer_destroy(s_therm_icon);
@@ -854,6 +922,9 @@ static void init(void) {
     s_no_vibe     = persist_exists(SET_NO_VIBE)         ? persist_read_bool(SET_NO_VIBE) : true;
     s_backlight   = persist_exists(SET_LIGHT_ON_CHG)    ? persist_read_bool(SET_LIGHT_ON_CHG) : false;
     s_msg_tmout   = persist_exists(SET_MESSAGE_TIMEOUT) ? (uint32_t)persist_read_int(SET_MESSAGE_TIMEOUT) : 15000;
+    s_color_low  = persist_exists(SET_COLOR_LOW)  ? GColorFromHEX((uint32_t)persist_read_int(SET_COLOR_LOW))  : GColorRed;
+    s_color_ok   = persist_exists(SET_COLOR_OK)   ? GColorFromHEX((uint32_t)persist_read_int(SET_COLOR_OK))   : GColorGreen;
+    s_color_high = persist_exists(SET_COLOR_HIGH) ? GColorFromHEX((uint32_t)persist_read_int(SET_COLOR_HIGH)) : GColorVividCerulean;
 
     // Restore last known temperature so it shows immediately on launch
     if (persist_exists(WEATHER_TEMP_KEY)) {

@@ -28,6 +28,34 @@
     "defaultValue": false
   },
   {
+    "type": "heading",
+    "defaultValue": "Glucose colors"
+  },
+  {
+    "type": "color",
+    "messageKey": "colorlow",
+    "defaultValue": "ff0000",
+    "label": "Low",
+    "capabilities": ["COLOR"],
+    "sunlight": true
+  },
+  {
+    "type": "color",
+    "messageKey": "colorok",
+    "defaultValue": "00ff00",
+    "label": "In range",
+    "capabilities": ["COLOR"],
+    "sunlight": true
+  },
+  {
+    "type": "color",
+    "messageKey": "colorhigh",
+    "defaultValue": "00aaff",
+    "label": "High",
+    "capabilities": ["COLOR"],
+    "sunlight": true
+  },
+  {
     "type": "slider",
     "messageKey": "messagetimeout",
     "defaultValue": 15,
