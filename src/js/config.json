@@ -1,67 +1,41 @@
 [
-  { 
-    "type": "heading", 
-    "defaultValue": "xDrip Pebble Watchface" 
-  }, 
-  { 
-    "type": "text", 
-    "defaultValue": "Configure your watch face here" 
+  {
+    "type": "heading",
+    "defaultValue": "xDrip Pebble Time 2"
   },
   {
     "type": "toggle",
     "messageKey": "displaysecs",
-    "label": "Display Seconds in Time",
+    "label": "Display seconds in time",
     "defaultValue": false
   },
   {
     "type": "toggle",
     "messageKey": "viberepeat",
-    "label": "Repeat Alert vibrations every 15 minutes",
+    "label": "Repeat alert vibrations every 15 minutes",
     "defaultValue": true
   },
   {
     "type": "toggle",
     "messageKey": "novibe",
-    "label": "Watch will not make any vibrations",
+    "label": "Silence all vibrations",
     "defaultValue": false
   },
   {
     "type": "toggle",
     "messageKey": "lightoncharge",
-    "label": "Backlight on when watch is charging",
+    "label": "Backlight on when charging",
     "defaultValue": false
   },
   {
-    "type": "toggle",
-    "messageKey": "monochrome",
-    "label": "Same background colour top and bottom",
-    "defaultValue": false
-  },
-  {
-    "type": "color",
-    "messageKey": "foreground",
-    "defaultValue": "ffffff",
-    "label": "Foreground Color",
-    "capabilities": ["COLOR"],
-    "sunlight": false
-  },
-  {
-    "type": "color",
-    "messageKey": "background",
-    "defaultValue": "0000aa",
-    "label": "Background Color",
-    "capabilities": ["COLOR"],
-    "sunlight": false
-  },
-  {
-      "type": "slider",
-      "messageKey": "messagetimeout",
-      "defaultValue": 15,
-      "label": "Process messages every",
-      "min": 5,
-      "max": 60,
-      "step": 5,
-      "description": "seconds"
+    "type": "slider",
+    "messageKey": "messagetimeout",
+    "defaultValue": 15,
+    "label": "Process messages every",
+    "min": 5,
+    "max": 60,
+    "step": 5,
+    "description": "seconds"
   },
   {
     "type": "submit",
