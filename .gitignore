@@ -1,0 +1,6 @@
+build/
+node_modules/
+.lock-waf_*
+package-lock.json
+screenshot_emery.png
+*.map

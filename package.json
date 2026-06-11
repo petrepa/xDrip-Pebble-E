@@ -7,7 +7,7 @@
   ],
   "pebble": {
     "sdkVersion": "3",
-    "enableMultiJS": "false",
+    "enableMultiJS": true,
     "resources": {
       "media": [
         {
@@ -141,6 +141,9 @@
       "nolowline": 110,
       "health": 112,
       "messagetimeout": 113,
+      "weather_temp": 200,
+      "weather_cond": 201,
+      "weather_req": 202,
       "sync": 1000,
       "platform": 1001,
       "version": 1002,
@@ -148,23 +151,17 @@
       "trend_lines": 1004,
       "data_options": 1005
     },
-    "displayName": "xDrip Watch Face",
+    "displayName": "xDrip Casio",
     "watchapp": {
       "onlyShownOnCommunication": false,
       "hiddenApp": false,
       "watchface": true
     },
-    "targetPlatforms": [
-      "aplite",
-      "basalt",
-      "chalk",
-      "diorite",
-      "emery",
-      "gabbro"
-    ],
+    "targetPlatforms": ["emery"],
     "capabilities": [
       "configurable",
-      "health"
+      "health",
+      "location"
     ]
   },
   "name": "xDrip-Trend",
