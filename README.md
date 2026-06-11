@@ -1,56 +1,115 @@
-# xDrip-Pebble
-Offline Pebble watchface for xDrip+, based on the Nightscout community version
-Note: You require xDrip+ version later than January 2025 and Pebble application version 1.0.10.8 or later.  
-And until further notice, or this face is added to xDrip+, please install the "Pebble Trend Clay Version (Test)" watch face before installing this on Colour Pebbles, or "Pebble Trend Classic" for monochrome Pebbles.
-Otherwise you may be stuck at the LOADING... message as that code is required in xDrip to support this face.
+# xDrip Casio — Pebble Time 2 Watchface
 
-As such, it is based on the cgm-pebble version 6.0 code.
-There ARE NO EASTER EGGS, unless they are provided by xDrip.
+A CGM watchface for xDrip+ on the **Pebble Time 2 (Emery, 200×228)**, redesigned with a clean Casio-inspired aesthetic.
 
-This watch face is meant for patients to use with xDrip, not for parents/carers.
-Ensure you enable notifications from xDrip in the Pebble App otherwise these will NOT come through on the Pebble.
-Note:  The following settings are available from xDrip:
- * Display Trend - Turning on will display the BGL trend, sent as a Pebble format PNG.
- * Display Low Line - Display the low limit line on the trend.
- * Display High Line - Display the high limit line on the trend.
- * Trend Period - The period to display the trend (1 hour, 2 hour, 3 hour, 4 hour.  Beyond 4 hour is meaningless).
- * Display Delta - Display the delta (change) value.
- * Display Delta Units - Display mmol/l or mg/dl (as set in xDrip) units in the Delta.
- * Display Slope Arrows - Display the flat, 45 up/down, up/down, double up/down arrows like the Dexcom reader.
- * Special Value - A BGL value to display a message on the watch face (default 5.5 mmol/l or 99 mg/dl, but fully configurable so the people that prefer the 100 value can set that).
- * Text to Display - The text to display if the above special value is reached.  (default BAZINGA!)  Needs to be short.
+> **Based on** [consp/xDrip-Pebble-E](https://github.com/consp/xDrip-Pebble-E), which is itself based on the Nightscout community version.
 
-Using Pebble Clay, the watch face now has settings available in the Pebble app.  Eventually, most of the settings above will move into the Pebble app settings, and the watch face will ask for the things it wants, rather than them being sent regardless.
-As of this version, the following settings are available.
- * Display Seconds - Appends the Seconds to the watch time.  ie 00:00:00, instead of 00:00. Default off.
- * Re Raise NO BLUETOOTH vibration alert - Causes a periodic vibration until NO BLUETOOTH is cleared.  Default on.
- * Watch will not make any vigrations - effectively silences the watch face vibrations.  Default off.
- * Light on charge - Illuminates the watch face when charging.  (note, you have to dismiss the charging display and get back to the watch face)  Allows you to see the watch in the dark when charghing.  Default off.
- * Same background top and bottom - Sets the same background colour top and bottom.
- * Foreground Colour - Colour to use for "light" sections of the display.  Default white.  Only useful for Basalt, Chalk, and Emery
- * Background Colour - Colour to use for "Dark" sections of the display.  Default Duke Blue.  Only useful for Basalt, Chalk, and Emery
- * Message timer - Seconds between each check for displaying the message / delta. This is done to avoid having to use the seconds timer for everything increasing the system/battery load. Default is 15 seconds (5-60s)
-The above settings are stored in the watch, and persist between watch face transitions.
+---
 
-Build Environment:
-* Pebble Tool: latest 
-* SDK: latest  
-* Clay: @rebble/clay latest v1.0 or later
+## Screenshot
 
-Change Log:
-20260609 - Refactored code, fixed outstanding issues and made it nicer to watch on a PT2 display.
-* Fixed issues with wrong x/y width/height values on PT2, PD2, Gabbro
-* Fixed Gabbro face to look like the one for the PR
-* Moved seconds timer and message display timer into their own functions to avoid waking every second when seconds is off (this should reduce battery load)
-* Removed most ifdefs for debug messages and replaced them with vararg macros 
-* Added 60pt font
-* Dynamic 40pt/60pt font for PT2 without/with seconds enabled. This also moves the date to accomodate a bit more screenspace niceness
-* Increased size of the CGM Time value to make it readable for those without microscopic vision
-* Moved all text 1 or 2 pixels from the border
-* Fixed bounding box on PT, for some reason on the latest SDK it would otherwise render some text patially off screen
-* Switched green to brightgreen to increase contrast
+![Watchface screenshot](screenshot.png)
 
-20260227 - This is a refactor of the oringinal code to build with SDK v4.9.127 and add initial support for Gabbro (Core Round 2).
-Notes:
-* Gabbro will look strange as none of the bitmap or text layers have been resized from Clay as yet.  Also, it is not tested. This will be fixed in later releases.
-* The SDK has imposed a lot more "errors" and will not build if there are unused defines or variables.  These have been removed by commenting, not yet removed fully from the source.
+*(Replace with a real screenshot from your watch)*
+
+---
+
+## Features
+
+- **Blood glucose** value, large and prominently displayed — color-coded:
+  - 🔴 Red = low
+  - 🟢 Green = in range
+  - 🔵 Blue = high
+- **Trend arrow** — sleek custom-drawn vector arrows (↑↑ ↑ ↗ → ↘ ↓ ↓↓)
+- **Time since last reading** — top-right of glucose section
+- **Large time display** — Gotham Bold 60pt, center of the face
+- **Date** — below the time
+- **Live weather temperature** — via Open-Meteo API (no API key required), fetched via PebbleKit JS using phone GPS
+- **Heart rate** — from Pebble Health sensor (Emery only)
+- **Phone battery** and **watch battery** — with drawn phone/watch icons
+- Clean minimal layout — no divider lines
+
+---
+
+## Requirements
+
+- **Pebble Time 2** (Emery platform, 200×228 color display)
+- **xDrip+** — version later than January 2025
+- **Pebble app** — version 1.0.10.8 or later
+- Before installing, ensure the **"Pebble Trend Clay Version (Test)"** watchface has been installed first — this registers the xDrip communication protocol
+
+---
+
+## Build
+
+```bash
+pebble build
+```
+
+Install on device:
+```bash
+pebble install --phone <PHONE_IP>
+```
+
+Install on emulator:
+```bash
+pebble install --emulator emery
+```
+
+**Requirements:** Pebble SDK 4.9+, Node.js (for Clay config)
+
+---
+
+## Settings
+
+Configured via the Pebble app (Clay):
+
+| Setting | Default | Description |
+|---|---|---|
+| Display Seconds | Off | Appends seconds to the clock — `HH:MM:SS` |
+| Re-raise BT alert | On | Periodic vibration until Bluetooth reconnects |
+| Silence all vibrations | Off | Disables all watchface vibrations |
+| Light on charge | Off | Keeps backlight on while charging |
+| Message timer | 15s | Interval for message/delta display updates |
+
+Settings are stored on the watch and persist across watchface transitions.
+
+---
+
+## Data displayed
+
+| Element | Source |
+|---|---|
+| BG value + trend arrow | xDrip+ via AppMessage |
+| Time since last reading | xDrip+ timestamp |
+| Heart rate | Pebble Health API |
+| Weather temperature | Open-Meteo API via PebbleKit JS |
+| Phone battery | xDrip+ |
+| Watch battery | Pebble battery service |
+
+---
+
+## Change Log
+
+**pt2 branch — Casio redesign (2026-06-11)**
+- Complete visual rewrite targeting Pebble Time 2 (Emery)
+- Clean black background, single-color design
+- Large Gotham Bold 60pt time display
+- BG glucose color-coded (red/green/blue)
+- Custom vector trend arrows replacing legacy bitmaps
+- Consistent 4-cell data grid with drawn icons (thermometer, heart, phone, watch)
+- Live weather temperature via Open-Meteo + PebbleKit JS
+- Heart rate via Pebble Health API
+- Persisted weather temperature across restarts
+- Removed all section dividers for minimal look
+- Emery-only target
+
+**20260609**
+- Refactored code, fixed outstanding issues and made it nicer to watch on a PT2 display
+- Fixed issues with wrong x/y width/height values on PT2, PD2, Gabbro
+- Added 60pt font, dynamic 40pt/60pt font for PT2
+- Moved seconds timer and message display timer into their own functions
+
+**20260227**
+- Refactor to build with SDK v4.9.127
+- Initial support for Gabbro (Core Round 2)
