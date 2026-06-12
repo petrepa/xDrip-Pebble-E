@@ -122,6 +122,16 @@ static char     s_phone_bat_str[6]= " ";
 static char     s_temp_str[10]    = "--";
 static bool     s_specvalue        = false;
 static int      s_arrow_idx        = 0;
+static bool     s_lang_nynorsk     = false;
+
+// Nynorsk day and month names
+static const char * const NN_DAYS[7] = {
+    "Sun","M\xc3\xa5n","Tys","Ons","Tor","Fre","Lau"
+};
+static const char * const NN_MONTHS[12] = {
+    "jan","feb","mar","apr","mai","jun",
+    "jul","aug","sep","okt","nov","des"
+};
 static GColor   s_color_low;   // glucose below range
 static GColor   s_color_ok;    // glucose in range
 static GColor   s_color_high;  // glucose above range
@@ -517,7 +527,12 @@ static void update_time_date(struct tm *t) {
     static char dbuf[13];
     strftime(s_time_str, sizeof(s_time_str), s_timefmt, t);
     layer_mark_dirty(s_time_layer);
-    strftime(dbuf, sizeof(dbuf), "%a %d %b", t);
+    if (s_lang_nynorsk) {
+        snprintf(dbuf, sizeof(dbuf), "%s %d %s",
+            NN_DAYS[t->tm_wday], t->tm_mday, NN_MONTHS[t->tm_mon]);
+    } else {
+        strftime(dbuf, sizeof(dbuf), "%a %d %b", t);
+    }
     text_layer_set_text(s_date_layer, dbuf);
 }
 
@@ -747,6 +762,12 @@ static void inbox_received(DictionaryIterator *iter, void *ctx) {
             if (s_bg_layer) text_layer_set_text_color(s_bg_layer, get_bg_color());
             break;
 
+        case SET_LANGUAGE:
+            s_lang_nynorsk = (t->value->uint8 > 0);
+            persist_write_bool(SET_LANGUAGE, s_lang_nynorsk);
+            { time_t n = time(NULL); update_time_date(localtime(&n)); }
+            break;
+
         default: break;
         }
         t = dict_read_next(iter);
@@ -922,6 +943,7 @@ static void init(void) {
     s_no_vibe     = persist_exists(SET_NO_VIBE)         ? persist_read_bool(SET_NO_VIBE) : true;
     s_backlight   = persist_exists(SET_LIGHT_ON_CHG)    ? persist_read_bool(SET_LIGHT_ON_CHG) : false;
     s_msg_tmout   = persist_exists(SET_MESSAGE_TIMEOUT) ? (uint32_t)persist_read_int(SET_MESSAGE_TIMEOUT) : 15000;
+    s_lang_nynorsk = persist_exists(SET_LANGUAGE) ? persist_read_bool(SET_LANGUAGE) : false;
     s_color_low  = persist_exists(SET_COLOR_LOW)  ? GColorFromHEX((uint32_t)persist_read_int(SET_COLOR_LOW))  : GColorRed;
     s_color_ok   = persist_exists(SET_COLOR_OK)   ? GColorFromHEX((uint32_t)persist_read_int(SET_COLOR_OK))   : GColorGreen;
     s_color_high = persist_exists(SET_COLOR_HIGH) ? GColorFromHEX((uint32_t)persist_read_int(SET_COLOR_HIGH)) : GColorVividCerulean;

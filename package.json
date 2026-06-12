@@ -136,6 +136,7 @@
       "colorlow": 120,
       "colorok": 121,
       "colorhigh": 122,
+      "language": 123,
       "weather_temp": 200,
       "weather_cond": 201,
       "weather_req": 202,

@@ -56,6 +56,16 @@
     "sunlight": true
   },
   {
+    "type": "heading",
+    "defaultValue": "Language / Språk"
+  },
+  {
+    "type": "toggle",
+    "messageKey": "language",
+    "label": "Dato på nynorsk",
+    "defaultValue": false
+  },
+  {
     "type": "slider",
     "messageKey": "messagetimeout",
     "defaultValue": 15,

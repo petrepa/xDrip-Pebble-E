@@ -16,15 +16,14 @@ A CGM watchface for xDrip+ on the **Pebble Time 2 (Emery, 200×228)**, redesigne
 
 ## Features
 
-- **Blood glucose** value, large and prominently displayed — color-coded:
-  - 🔴 Red = low
-  - 🟢 Green = in range
-  - 🔵 Blue = high
+- **Blood glucose** value, large and prominently displayed — color-coded (configurable):
+  - Low / in range / high colors set in the Pebble app settings
 - **Trend arrow** — sleek custom-drawn vector arrows (↑↑ ↑ ↗ → ↘ ↓ ↓↓)
 - **Time since last reading** — top-right of glucose section
 - **Large time display** — Gotham Bold 60pt, center of the face
-- **Date** — below the time
-- **Live weather temperature** — via Open-Meteo API (no API key required), fetched via PebbleKit JS using phone GPS
+- **Seconds mode** — monospace fixed-cell rendering, no digit drift
+- **Date** — below the time, with optional Nynorsk localisation
+- **Live weather temperature** — via Open-Meteo API (no API key required), fetched via PebbleKit JS using phone GPS; persisted across restarts
 - **Heart rate** — from Pebble Health sensor (Emery only)
 - **Phone battery** and **watch battery** — with drawn phone/watch icons
 - Clean minimal layout — no divider lines
@@ -66,10 +65,14 @@ Configured via the Pebble app (Clay):
 
 | Setting | Default | Description |
 |---|---|---|
-| Display Seconds | Off | Appends seconds to the clock — `HH:MM:SS` |
+| Display seconds | Off | Appends seconds to the clock — `HH:MM:SS` (monospace, no drift) |
 | Re-raise BT alert | On | Periodic vibration until Bluetooth reconnects |
 | Silence all vibrations | Off | Disables all watchface vibrations |
 | Light on charge | Off | Keeps backlight on while charging |
+| Low glucose color | Red | BG display color when below range |
+| In range glucose color | Green | BG display color when in range |
+| High glucose color | Blue | BG display color when above range |
+| Dato på nynorsk | Off | Show date in Nynorsk instead of English |
 | Message timer | 15s | Interval for message/delta display updates |
 
 Settings are stored on the watch and persist across watchface transitions.
@@ -90,6 +93,13 @@ Settings are stored on the watch and persist across watchface transitions.
 ---
 
 ## Change Log
+
+**pt2 branch — 2026-06-12**
+- Configurable glucose colors (low/in range/high) via Pebble app settings
+- Nynorsk date localisation toggle (Mån/Tys/Ons/Tor/Fre/Lau/Sun + jan–des)
+- Seconds display uses fixed-cell monospace rendering — no digit drift
+- Weather temperature persisted across restarts
+- Seconds font switches automatically to fit `HH:MM:SS` in the time section
 
 **pt2 branch — Visual redesign (2026-06-11)**
 - Complete visual rewrite targeting Pebble Time 2 (Emery)
